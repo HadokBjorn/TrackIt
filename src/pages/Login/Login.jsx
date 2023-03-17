@@ -13,11 +13,11 @@ if(isLogin){
             <img src={loginLogo} alt="Logo de Login"/>
             {isLogin ? (
                 <FormContainer>
-                    <input type={"email"} placeholder={"email"}/>
-                    <input type={"password"} placeholder={"senha"}/>
-                    <button>Entrar</button>
+                    <input type={"email"} placeholder={"email"} data-test="email-input"/>
+                    <input type={"password"} placeholder={"senha"} data-test="password-input"/>
+                    <button data-test="login-btn">Entrar</button>
 
-                    <p onClick={()=>setIsLogin(false)}>Não tem uma conta? Cadastre-se!</p>
+                    <p onClick={()=>setIsLogin(false)} data-test="signup-link">Não tem uma conta? Cadastre-se!</p>
                 </FormContainer>
             ):(
                 <FormContainer>
