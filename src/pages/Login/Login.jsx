@@ -1,42 +1,33 @@
-import { useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import loginLogo from "../../assets/login-logo.png";
 
-function Login(){
-const [isLogin, setIsLogin] = useState(true)
+export function Login(){
 
-if(isLogin){
-    
-}
+    function sendLogin(e){
+        e.preventDefault();
+    }
+
     return(
         <PageContainer>
             <img src={loginLogo} alt="Logo de Login"/>
-            {isLogin ? (
-                <FormContainer>
+
+                <FormContainer onSubmit={sendLogin}>
                     <input type={"email"} placeholder={"email"} data-test="email-input"/>
                     <input type={"password"} placeholder={"senha"} data-test="password-input"/>
-                    <button data-test="login-btn">Entrar</button>
+                    <button data-test="login-btn" type="submit">Entrar</button>
 
-                    <p onClick={()=>setIsLogin(false)} data-test="signup-link">Não tem uma conta? Cadastre-se!</p>
+                    <Link to={"/cadastro"}>
+                        <p data-test="signup-link">Não tem uma conta? Cadastre-se!</p>
+                    </Link>
                 </FormContainer>
-            ):(
-                <FormContainer>
-                    <input type={"email"} placeholder={"email"}/>
-                    <input type={"password"} placeholder={"senha"}/>
-                    <input type={"text"} placeholder={"nome"}/>
-                    <input type={"url"} placeholder={"foto"} alt="foto de perfil"/> 
-                    <button>Entrar</button>
-
-                    <p onClick={()=>setIsLogin(true)}>Já tem uma conta? Faça login!</p>
-                </FormContainer>
-            )}
             
         </PageContainer>
     )
 }
 
-const PageContainer = styled.div`
-
+export const PageContainer = styled.div`
+    width: -webkit-fill-available;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -59,7 +50,7 @@ const PageContainer = styled.div`
         color: #52B6FF;
     }
 `
-const FormContainer = styled.form`
+export const FormContainer = styled.form`
     width: 100%;
     gap: 6px;
     display: flex;
@@ -75,6 +66,7 @@ const FormContainer = styled.form`
         border-radius: 5px;
     }
     input::placeholder{
+        font-family: 'Lexend Deca', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 19.976px;
@@ -88,8 +80,7 @@ const FormContainer = styled.form`
         background: #52B6FF;
         border:none;
         border-radius: 4.63636px;
-
-        font-style: normal;
+        
         font-weight: 400;
         font-size: 20.976px;
         line-height: 26px;
@@ -98,5 +89,3 @@ const FormContainer = styled.form`
         color: #FFFFFF;
     }
 `
-
-export default Login;
