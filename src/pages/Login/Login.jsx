@@ -1,11 +1,34 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import styled from "styled-components";
 import loginLogo from "../../assets/login-logo.png";
+import { ThreeDots } from "react-loader-spinner";
+import axios from "axios";
 
 export function Login(){
-
+    const [loader, setLoader] = useState(false);
+    const [form, setForm] = useState({
+        email: '',
+        password: '',
+    })
     function sendLogin(e){
+        setLoader(true);
         e.preventDefault();
+
+        const url = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login';
+        axios.post(url,form)
+        .then((res) => {
+            setLoader(false);
+            console.log(res.data)
+        })
+        .catch((err) => {
+            setLoader(false);
+            console.log(err);
+        })
+    }
+
+    function capturaInput(e){
+        setForm({...form,[e.target.name]:e.target.value})
     }
 
     return(
@@ -13,9 +36,35 @@ export function Login(){
             <img src={loginLogo} alt="Logo de Login"/>
 
                 <FormContainer onSubmit={sendLogin}>
-                    <input type={"email"} placeholder={"email"} data-test="email-input"/>
-                    <input type={"password"} placeholder={"senha"} data-test="password-input"/>
-                    <button data-test="login-btn" type="submit">Entrar</button>
+                    <input 
+                    type={"email"}
+                    name="email"
+                    value={form.email}
+                    placeholder={"email"} 
+                    data-test="email-input"
+                    onChange={capturaInput}
+                    />
+
+                    <input 
+                    type={"password"}
+                    name="password"
+                    value={form.password}
+                    placeholder={"senha"} 
+                    data-test="password-input"
+                    onChange={capturaInput}
+                    />
+
+                    <button disabled={loader} type="submit">
+                        {loader?(<ThreeDots 
+                        height="45" 
+                        width="80"
+                        radius="13"
+                        color="#fff" 
+                        ariaLabel="three-dots-loading"
+                        wrapperStyle={{}}
+                        wrapperClassName=""
+                        visible={true}/>):'Entrar'}
+                    </button>
 
                     <Link to={"/cadastro"}>
                         <p data-test="signup-link">Não tem uma conta? Cadastre-se!</p>
@@ -85,6 +134,10 @@ export const FormContainer = styled.form`
         font-size: 20.976px;
         line-height: 26px;
         text-align: center;
+        
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         color: #FFFFFF;
     }

@@ -2,9 +2,10 @@ import { Navbar } from '../../components/Navbar/Navbar'
 import { FooterMenu } from '../../components/FooterMenu/FooterMenu';
 import styled from 'styled-components';
 import { BsTrash } from "react-icons/bs";
+import { useState } from 'react';
 
 export function Habitos(){
-
+    const [newHabito, setNewHabito] = useState(false)
     return(
         <section>
             <Navbar/>
@@ -12,9 +13,9 @@ export function Habitos(){
                     <header>
                         <div>
                             <p>Meus hábitos</p>
-                            <button> + </button>
+                            <button onClick={()=>setNewHabito(true)}> + </button>
                         </div>
-                        <CardHabito>
+                        {newHabito?(<CardHabito>
                             <form>
                                 <input type="text" placeholder="nome do hábito" />
                                 <ul>
@@ -26,12 +27,12 @@ export function Habitos(){
                                     <li>S</li>
                                 </ul>
                                 <div className='container-button-save'>
-                                    <p className='cancelar'>Cancelar</p>
+                                    <p onClick={()=>setNewHabito(false)} className='cancelar'>Cancelar</p>
                                     <button>Salvar</button>
                                 </div>
                                 
                             </form>
-                        </CardHabito>
+                        </CardHabito>):''}
                     </header>
 
                     <main>
@@ -265,7 +266,9 @@ const HabitosContainer = styled.div`
         align-items: center;
 
         overflow-y: auto;
-
+    }
+    main::-webkit-scrollbar{
+        width: 0;
     }
 `
 const CardHabito = styled.div`
@@ -301,7 +304,7 @@ const CardHabito = styled.div`
         font-size: 19.976px;
         line-height: 25px;
 
-        #666666
+        color: #666666;
     }
 
     input::placeholder{

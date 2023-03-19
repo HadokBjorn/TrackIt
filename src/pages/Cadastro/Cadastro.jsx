@@ -1,21 +1,91 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import loginLogo from "../../assets/login-logo.png";
 import { PageContainer, FormContainer } from "../Login/Login";
+import { ThreeDots } from "react-loader-spinner";
+import axios from "axios";
 
 function Cadastro(){
+    const navigate = useNavigate();
+    const [loader, setLoader] = useState(false);
+    const [form, setForm] = useState({
+        email: '',
+        name: '',
+        image: '',
+        password: '',
+    })
     
     function sendCadastro(e){
+        setLoader(true);
+        const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up";
+        axios.post(url,form)
+            .then((res)=>{
+                setLoader(false);
+                navigate("/");
+                console.log(res.data);
+            })
+            .catch((err)=>{
+                setLoader(false);
+                alert(err.response.data.message);
+            })
+
         e.preventDefault();
+    }
+    function capturaInput(e){
+        setForm({...form,[e.target.name]:e.target.value})
     }
     return(
         <PageContainer onSubmit={(e)=>sendCadastro(e)}>
             <img src={loginLogo} alt="Logo de Login"/>
                 <FormContainer>
-                    <input type={"email"} placeholder={"email"}/>
-                    <input type={"password"} placeholder={"senha"}/>
-                    <input type={"text"} placeholder={"nome"}/>
-                    <input type={"url"} placeholder={"foto"} alt="foto de perfil"/> 
-                    <button type="submit">Cadastrar</button>
+                    <input 
+                    required 
+                    name="email"
+                    value={form.email} 
+                    type={"email"} 
+                    placeholder={"email"}
+                    onChange={capturaInput}
+                    />
+
+                    <input
+                    required
+                    name="password"
+                    value={form.password} 
+                    type={"password"} 
+                    placeholder={"senha"}
+                    onChange={capturaInput}
+                    />
+
+                    <input
+                    required
+                    name="name"
+                    value={form.name} 
+                    type={"text"} 
+                    placeholder={"nome"}
+                    onChange={capturaInput}
+                    />
+
+                    <input
+                    required
+                    name="image"
+                    value={form.image}
+                    type={"url"} 
+                    placeholder={"foto"} 
+                    onChange={capturaInput}
+                    /> 
+
+                    <button disabled={loader} type="submit">
+                        {loader?(<ThreeDots 
+                        height="45" 
+                        width="80"
+                        radius="13"
+                        color="#fff" 
+                        ariaLabel="three-dots-loading"
+                        wrapperStyle={{}}
+                        wrapperClassName=""
+                        visible={true}/>):'Cadastrar'}
+                    </button>
+
                     <Link to={"/"}>
                         <p>Já tem uma conta? Faça login!</p>
                     </Link>
