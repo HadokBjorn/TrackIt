@@ -39,7 +39,8 @@ export function Login(){
             <img src={loginLogo} alt="Logo de Login"/>
 
                 <FormContainer onSubmit={sendLogin}>
-                    <input 
+                    <input
+                    disabled={loader}
                     type={"email"}
                     name="email"
                     value={form.email}
@@ -48,7 +49,8 @@ export function Login(){
                     onChange={capturaInput}
                     />
 
-                    <input 
+                    <input
+                    disabled={loader}
                     type={"password"}
                     name="password"
                     value={form.password}

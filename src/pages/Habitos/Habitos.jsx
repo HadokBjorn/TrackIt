@@ -27,7 +27,6 @@ export function Habitos(){
         axios.get(url, config)
         .then((res)=>{
             setTarefas(res.data)
-            console.log(res.data)
         })
         .catch((err)=>{
             console.log(err.response.data)
@@ -40,7 +39,6 @@ export function Habitos(){
 
         const adicionaDia = [...diaSelecionado, dia];
         setDiaSelecionado(adicionaDia);
-        console.log(adicionaDia);
         }else{
             const removeDia = [...diaSelecionado].filter(el => el !== dia)
             setDiaSelecionado(removeDia);
@@ -71,8 +69,6 @@ export function Habitos(){
             setIsDisabled(false);
             setNewHabito(false);
             setRenderizar(res);
-
-            console.log(res.data)
             })
             .catch((err)=>{
             setIsDisabled(false);
@@ -83,7 +79,6 @@ export function Habitos(){
     }
 
     function deletarHabito(id){
-        console.log(id)
         const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`;
         const config = {headers: {Authorization: `Bearer ${infoUser.token}`}}
 
@@ -131,6 +126,7 @@ export function Habitos(){
                         (<CardHabito data-test="habit-create-container">
                             <form onSubmit={submitTarefa}>
                                 <input
+                                disabled={isDisabled}
                                 data-test="habit-name-input"
                                 value={form.name}
                                 name="name"
@@ -155,7 +151,7 @@ export function Habitos(){
                                     ))}
                                 </ul>
                                 <div className='container-button-save'>
-                                    <p data-test="habit-create-cancel-btn" onClick={()=>setNewHabito(false)} className='cancelar'>Cancelar</p>
+                                    <button data-test="habit-create-cancel-btn" disabled={isDisabled} className="cancelar" onClick={()=>setNewHabito(false)} className='cancelar'>Cancelar</button>
                                     <button data-test="habit-create-save-btn" disabled={isDisabled} type="submit">
                                         {isDisabled?(<ThreeDots 
                                         height="10" 
@@ -375,7 +371,7 @@ const CardHabito = styled.div`
 
         color: #FFFFFF;
     }
-    .cancelar{
+    .container-button-save .cancelar{
         background: none;
         color: #52B6FF;
     }

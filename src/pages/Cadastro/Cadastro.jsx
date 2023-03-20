@@ -39,6 +39,7 @@ function Cadastro(){
             <img src={loginLogo} alt="Logo de Login"/>
                 <FormContainer>
                     <input
+                    disabled={loader}
                     data-test="email-input"
                     required 
                     name="email"
@@ -49,6 +50,7 @@ function Cadastro(){
                     />
 
                     <input
+                    disabled={loader}
                     data-test="password-input"
                     required
                     name="password"
@@ -59,6 +61,7 @@ function Cadastro(){
                     />
 
                     <input
+                    disabled={loader}
                     data-test="user-name-input"
                     required
                     name="name"
@@ -69,6 +72,7 @@ function Cadastro(){
                     />
 
                     <input
+                    disabled={loader}
                     data-test="user-image-input"
                     required
                     name="image"
