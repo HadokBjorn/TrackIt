@@ -38,6 +38,12 @@ export const GlobalStyle = createGlobalStyle`
     .custom-ui{
         font-size: 18px;
         font-weight: 700;
+        display: flex;
+        text-align: center;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
     }
     .delete-cancel{
         margin-top: 20px;

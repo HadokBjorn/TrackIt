@@ -36,60 +36,19 @@ export function Hoje(){
                     (<h3>Nenhum hábito concluído ainda</h3>)}
                 </header>
                 <main>
-                    {(tarefas.length===0)?"":(<CardHoje>
-                        <div>
-                            <p>Ler 1 capítulo de livro</p>
-                            <h3>Sequência atual: 3 dias</h3>
-                            <h3>Seu recorde: 5 dias</h3>
-                        </div>
-                        <button>
-                            <FaCheck size={35} className="icon-check"/>
-                        </button>
-                    </CardHoje>)}
-
-                    {/* <CardHoje>
-                        <div>
-                            <p>Ler 1 capítulo de livro</p>
-                            <h3>Sequência atual: 3 dias</h3>
-                            <h3>Seu recorde: 5 dias</h3>
-                        </div>
-                        <button>
-                            <FaCheck size={35} className="icon-check"/>
-                        </button>
-                    </CardHoje>
-
-                    <CardHoje>
-                        <div>
-                            <p>Ler 1 capítulo de livro</p>
-                            <h3>Sequência atual: 3 dias</h3>
-                            <h3>Seu recorde: 5 dias</h3>
-                        </div>
-                        <button>
-                            <FaCheck size={35} className="icon-check"/>
-                        </button>
-                    </CardHoje>
-
-                    <CardHoje>
-                        <div>
-                            <p>Ler 1 capítulo de livro</p>
-                            <h3>Sequência atual: 3 dias</h3>
-                            <h3>Seu recorde: 5 dias</h3>
-                        </div>
-                        <button>
-                            <FaCheck size={35} className="icon-check"/>
-                        </button>
-                    </CardHoje>
-
-                    <CardHoje>
-                        <div>
-                            <p>Ler 1 capítulo de livro</p>
-                            <h3>Sequência atual: 3 dias</h3>
-                            <h3>Seu recorde: 5 dias</h3>
-                        </div>
-                        <button>
-                            <FaCheck size={35} className="icon-check"/>
-                        </button>
-                    </CardHoje> */}
+                    {(tarefas.length===0)?"":
+                    (tarefas.map((card,i)=>(
+                        <CardHoje key={i}>
+                            <div>
+                                <p>{card.name}</p>
+                                <h3>Sequência atual: 3 dias</h3>
+                                <h3>Seu recorde: 5 dias</h3>
+                            </div>
+                            <button className={card.done?'concluido':''}>
+                                <FaCheck size={35} className="icon-check"/>
+                            </button>
+                        </CardHoje>
+                    )))}
                 </main>
             </HojeContainer>
             <FooterMenu/>
@@ -153,7 +112,8 @@ const CardHoje = styled.div`
     align-items: center;
     
     div{
-        margin: 15px 13px;
+        margin: 13px 0 15px 15px;
+        width: 60%;
     }
     button{
         width: 69px;
@@ -182,6 +142,10 @@ const CardHoje = styled.div`
 
 
         color: #666666;
+    }
+
+    .concluido{
+        background-color: #8FC549;
     }
 
 `
