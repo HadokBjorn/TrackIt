@@ -35,4 +35,30 @@ export const GlobalStyle = createGlobalStyle`
         font-family: 'Lexend Deca';
         font-style: normal;
     }
+    .custom-ui{
+        font-size: 18px;
+        font-weight: 700;
+    }
+    .delete-cancel{
+        margin-top: 20px;
+        gap: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+    .delete-cancel button{
+        border: none;
+        width: 80px;
+        height: 40px;
+        border-radius: 10px;
+        background-color: darkgray;
+        color: aliceblue;
+        font-weight: 700;
+
+    }
+    .delete-cancel .delete{
+        background-color: tomato;
+    
+    }
 `

@@ -6,6 +6,8 @@ import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import UserContext from '../../contexts/UserContext';
 import { ThreeDots } from "react-loader-spinner";
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 
 export function Habitos(){
@@ -70,7 +72,6 @@ export function Habitos(){
             setNewHabito(false);
             setRenderizar(res);
 
-
             console.log(res.data)
             })
             .catch((err)=>{
@@ -85,12 +86,36 @@ export function Habitos(){
         console.log(id)
         const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`;
         const config = {headers: {Authorization: `Bearer ${infoUser.token}`}}
-        axios.delete(url, config)
-        .then((res)=>{
-            console.log(res)
-            setRenderizar(res)
-        })
-        .catch((err)=> console.log(err.response.data.message))
+
+            confirmAlert({
+                customUI: ({ onClose }) => {
+                    return (
+                    <div className='custom-ui'>
+                        <h1>Deseja realmente deletar este hábito?</h1>
+                            <div className='delete-cancel'>
+                            <button onClick={onClose}>Cancelar</button>
+                            <button
+                            className='delete'
+                            onClick={() => {
+                                axios.delete(url, config)
+                                .then((res)=>{
+                                    console.log(res)
+                                    onClose();
+                                    setRenderizar(res)
+                                })
+                                .catch((err)=> {
+                                    onClose();
+                                    console.log(err.response.data.message)
+                                })
+                            }}
+                            >
+                                Deletar!
+                            </button>
+                        </div>
+                    </div>
+                    );
+                }
+                });
     }
 
     return(
