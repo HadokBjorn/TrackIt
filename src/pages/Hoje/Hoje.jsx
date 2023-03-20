@@ -11,15 +11,12 @@ export function Hoje(){
     const { infoUser } = useContext(UserContext)
     const [tarefas, setTarefas] = useState([])
     const [renderiza, setRenderiza] = useState([])
+    const [isDisabled, setIsDisabled] = useState(false)
+
+
     const updateLocale = require('dayjs/plugin/updateLocale')
     dayjs.extend(updateLocale)
-    dayjs.updateLocale('en', {
-        weekdays: [
-            "Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabádo"
-        ]
-        })
-    console.log()
-
+    dayjs.updateLocale('en', {weekdays: ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabádo"]})
 
     useEffect( () => {
         const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
@@ -36,18 +33,39 @@ export function Hoje(){
 
     }, [infoUser, renderiza] )
 
-    function ConcluirHabito(id){
+    function ConcluirHabito(item){
+
+        setIsDisabled(true)
+
         const config = {headers: {Authorization: `Bearer ${infoUser.token}`}}
-        const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/check`;
         const body = {}
-        axios.post(url,body, config)
-        .then((res)=>{
-            setRenderiza(res);
-            console.log(res)
-        })
-        .catch((err)=>{
-            console.log(err.response.data)
-        })
+
+        if(!item.done){
+            const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${item.id}/check`;
+            axios.post(url,body, config)
+            .then((res)=>{
+                setRenderiza(item.name);
+                setIsDisabled(false)
+                console.log(res)
+            })
+            .catch((err)=>{
+                alert(err.response.data.message)
+                setIsDisabled(false)
+            })
+        }
+        if(item.done){
+            const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${item.id}/uncheck`;
+            axios.post(url,body, config)
+            .then((res)=>{
+                setRenderiza(item.id);
+                console.log(res)
+                setIsDisabled(false)
+            })
+            .catch((err)=>{
+                alert(err.response.data.message)
+                setIsDisabled(false)
+            })
+        }
     }
 
     return(
@@ -69,7 +87,7 @@ export function Hoje(){
                                 <h3>Sequência atual: 3 dias</h3>
                                 <h3>Seu recorde: 5 dias</h3>
                             </div>
-                            <button onClick={()=> ConcluirHabito(card.id)} className={card.done?'concluido':''}>
+                            <button disabled={isDisabled} onClick={()=> ConcluirHabito(card)} className={card.done?'concluido':''}>
                                 <FaCheck size={35} className="icon-check"/>
                             </button>
                         </CardHoje>
