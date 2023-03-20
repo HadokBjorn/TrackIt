@@ -1,14 +1,16 @@
+import { useContext } from "react";
 import styled from "styled-components";
 import logoNavbar from "../../assets/logo.png";
-import userImage from "../../assets/user-image.png"
+import UserContext from "../../contexts/UserContext";
 
 
 export function Navbar(){
+    const { infoUser } = useContext(UserContext);
     return(
         <Header data-test="header">
             <img src={logoNavbar} alt="Logo"/>
             <div>
-                <img className="user-picture" src={userImage} alt="imagem de usuario"/>
+                <img className="user-picture" src={infoUser.image} alt="imagem de usuario"/>
             </div>
         </Header>
     )

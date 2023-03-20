@@ -2,18 +2,52 @@ import styled from "styled-components";
 import { Navbar } from '../../components/Navbar/Navbar'
 import { FooterMenu } from '../../components/FooterMenu/FooterMenu';
 import { FaCheck} from "react-icons/fa"
+import { useContext, useEffect, useState } from "react";
+import UserContext from "../../contexts/UserContext";
+import axios from "axios";
 
 export function Hoje(){
+    const { infoUser } = useContext(UserContext)
+    const [tarefas, setTarefas] = useState([])
+
+    useEffect( () => {
+        const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
+        const config = {headers: {Authorization: `Bearer ${infoUser.token}`}}
+        
+        axios.get(url, config)
+        .then((res)=>{
+            setTarefas(res.data)
+            console.log(res.data)
+        })
+        .catch((err)=>{
+            console.log(err.response.data)
+        })
+
+    }, [infoUser] )
+
     return(
         <section>
             <Navbar/>
             <HojeContainer>
                 <header>
                     <p>Segunda, 17/05</p>
-                    <h3>Nenhum hábito concluído ainda</h3>
+                    {(tarefas.length===0)?
+                    (<h3>Nenhum hábito adicionado</h3>):
+                    (<h3>Nenhum hábito concluído ainda</h3>)}
                 </header>
                 <main>
-                    <CardHoje>
+                    {(tarefas.length===0)?"":(<CardHoje>
+                        <div>
+                            <p>Ler 1 capítulo de livro</p>
+                            <h3>Sequência atual: 3 dias</h3>
+                            <h3>Seu recorde: 5 dias</h3>
+                        </div>
+                        <button>
+                            <FaCheck size={35} className="icon-check"/>
+                        </button>
+                    </CardHoje>)}
+
+                    {/* <CardHoje>
                         <div>
                             <p>Ler 1 capítulo de livro</p>
                             <h3>Sequência atual: 3 dias</h3>
@@ -55,18 +89,7 @@ export function Hoje(){
                         <button>
                             <FaCheck size={35} className="icon-check"/>
                         </button>
-                    </CardHoje>
-
-                    <CardHoje>
-                        <div>
-                            <p>Ler 1 capítulo de livro</p>
-                            <h3>Sequência atual: 3 dias</h3>
-                            <h3>Seu recorde: 5 dias</h3>
-                        </div>
-                        <button>
-                            <FaCheck size={35} className="icon-check"/>
-                        </button>
-                    </CardHoje>
+                    </CardHoje> */}
                 </main>
             </HojeContainer>
             <FooterMenu/>

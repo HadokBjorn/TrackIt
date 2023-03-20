@@ -5,21 +5,24 @@ import { Habitos } from "./pages/Habitos/Habitos";
 import { Hoje } from "./pages/Hoje/Hoje";
 import { Historico } from "./pages/Historico/Historico";
 import UserContext from "./contexts/UserContext"
+import { useState } from "react";
 
 
 function App() {
+  const [infoUser, setInfoUser] = useState();
+
   return (
     <section>
       <BrowserRouter>
+      <UserContext.Provider value={{infoUser, setInfoUser}}>
         <Routes>
           <Route path="/" element={<Login/>}/>
-          <UserContext.Provider>
             <Route path="/cadastro" element={<Cadastro/>}/>
             <Route path="/habitos" element={<Habitos/>}/>
             <Route path="/hoje" element={<Hoje/>}/>
             <Route path="/historico" element={<Historico/>}/>  
-          </UserContext.Provider>
         </Routes>
+        </UserContext.Provider>
       </BrowserRouter>
     </section>
   );

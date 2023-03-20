@@ -1,16 +1,18 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import loginLogo from "../../assets/login-logo.png";
 import { ThreeDots } from "react-loader-spinner";
 import axios from "axios";
+import UserContext from "../../contexts/UserContext";
 
 export function Login(){
+
+    const { setInfoUser } = useContext(UserContext);
     const [loader, setLoader] = useState(false);
-    const [form, setForm] = useState({
-        email: '',
-        password: '',
-    })
+    const navigate = useNavigate();
+    const [form, setForm] = useState({email: '', password: ''})
+    
     function sendLogin(e){
         setLoader(true);
         e.preventDefault();
@@ -19,11 +21,12 @@ export function Login(){
         axios.post(url,form)
         .then((res) => {
             setLoader(false);
-            console.log(res.data)
+            setInfoUser({image:res.data.image, token:res.data.token});
+            navigate("/hoje");
         })
         .catch((err) => {
             setLoader(false);
-            console.log(err);
+            alert(err.response.data.message);
         })
     }
 

@@ -2,10 +2,39 @@ import { Navbar } from '../../components/Navbar/Navbar'
 import { FooterMenu } from '../../components/FooterMenu/FooterMenu';
 import styled from 'styled-components';
 import { BsTrash } from "react-icons/bs";
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import axios from 'axios';
+import UserContext from '../../contexts/UserContext';
+import { ThreeDots } from "react-loader-spinner";
+
 
 export function Habitos(){
-    const [newHabito, setNewHabito] = useState(false)
+    const { infoUser } = useContext(UserContext)
+    const [newHabito, setNewHabito] = useState(false);
+    const semana = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
+    const [diaSelecionado, setDiaSelecionado] = useState([])
+    const [form, setForm] = useState({name:''})
+    const [tarefas, setTarefas] = useState([])
+    const [isDisabled, setIsDisabled] = useState(false)
+    const [renderizar, setRenderizar] = useState()
+
+    useEffect(()=>{
+        const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits";
+        const config = {headers: {Authorization: `Bearer ${infoUser.token}`}}
+
+        axios.get(url, config)
+        .then((res)=>{
+            setTarefas(res.data)
+            console.log(res.data)
+        })
+        .catch((err)=>{
+            console.log(err.response.data)
+        })
+
+    },[infoUser.token, renderizar])
+
+    
+
     return(
         <section>
             <Navbar/>
@@ -15,199 +44,79 @@ export function Habitos(){
                             <p>Meus hábitos</p>
                             <button onClick={()=>setNewHabito(true)}> + </button>
                         </div>
-                        {newHabito?(<CardHabito>
-                            <form>
-                                <input type="text" placeholder="nome do hábito" />
+                        {newHabito?
+                        (<CardHabito>
+                            <form /* onSubmit={submitTarefa} */>
+                                <input
+                                value={form.name}
+                                name="name"
+                                type="text" 
+                                required 
+                                placeholder="nome do hábito"
+                                /* onChange={capturaInput} */
+                                />
+
                                 <ul>
-                                    <li>D</li>
-                                    <li>S</li>
-                                    <li>Q</li>
-                                    <li>Q</li>
-                                    <li>S</li>
-                                    <li>S</li>
+                                    {semana.map((dia,i)=>(
+                                        <button
+                                        type="button"
+                                        /* onClick={()=>selecionaDia(i)} */ 
+                                        className={diaSelecionado.includes(i)?'active':''}
+                                        disabled={isDisabled} 
+                                        key={i}
+                                        >
+                                            {dia}
+                                        </button>
+                                    ))}
                                 </ul>
                                 <div className='container-button-save'>
                                     <p onClick={()=>setNewHabito(false)} className='cancelar'>Cancelar</p>
-                                    <button>Salvar</button>
+                                    <button disabled={isDisabled} type="submit">
+                                        {isDisabled?(<ThreeDots 
+                                        height="10" 
+                                        width="100%"
+                                        radius="10"
+                                        color="#fff" 
+                                        ariaLabel="three-dots-loading"
+                                        wrapperStyle={{}}
+                                        wrapperClassName=""
+                                        visible={true}/>):'Salvar'}
+                                    </button>
                                 </div>
                                 
                             </form>
-                        </CardHabito>):''}
+                        </CardHabito>):
+                        ''}
                     </header>
 
                     <main>
-                        <CardHabito>
-                            <div>
-                                <p>Ler 1 capítulo de livro e hablar con mi amigos en el facebuko</p>
-                                <ul>
-                                    <li>D</li>
-                                    <li>S</li>
-                                    <li>Q</li>
-                                    <li>Q</li>
-                                    <li>S</li>
-                                    <li>S</li>
-                                </ul>
-                            </div>
-                            <button>
-                                <BsTrash/>
-                            </button>
+                        {(tarefas.length===0)?
+                        (<CardHabito>
+                            <p>
+                            Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!
+                            </p>
+                        </CardHabito>):
+                        (tarefas.map((item,i)=>(
+                            <CardHabito key={i}>
+                                <div>
+                                    <p>{item.name}</p>
+                                    <ul>
+                                        {semana.map((dia,j)=>(
+                                            <button
+                                            type="button"
+                                            className={(item.days.includes(j) || (item.days.includes(7) && j===0))?
+                                            'active':''} key={j}>
+                                                {dia}
+                                            </button>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <DeleteTarefa /* onClick={()=>deletarHabito(item.id)} */>
+                                    <BsTrash/>
+                                </DeleteTarefa>
                         </CardHabito>
-
-                        <CardHabito>
-                            <div>
-                                <p>Ler 1 capítulo de livro e hablar con mi amigos en el facebuko</p>
-                                <ul>
-                                    <li>D</li>
-                                    <li>S</li>
-                                    <li>Q</li>
-                                    <li>Q</li>
-                                    <li>S</li>
-                                    <li>S</li>
-                                </ul>
-                            </div>
-                            <button>
-                                <BsTrash/>
-                            </button>
-                        </CardHabito>
-
-                        <CardHabito>
-                            <div>
-                                <p>Ler 1 capítulo de livro e hablar con mi amigos en el facebuko</p>
-                                <ul>
-                                    <li>D</li>
-                                    <li>S</li>
-                                    <li>Q</li>
-                                    <li>Q</li>
-                                    <li>S</li>
-                                    <li>S</li>
-                                </ul>
-                            </div>
-                            <button>
-                                <BsTrash/>
-                            </button>
-                        </CardHabito>
-
-                        <CardHabito>
-                            <div>
-                                <p>Ler 1 capítulo de livro e hablar con mi amigos en el facebuko</p>
-                                <ul>
-                                    <li>D</li>
-                                    <li>S</li>
-                                    <li>Q</li>
-                                    <li>Q</li>
-                                    <li>S</li>
-                                    <li>S</li>
-                                </ul>
-                            </div>
-                            <button>
-                                <BsTrash/>
-                            </button>
-                        </CardHabito>
-
-                        <CardHabito>
-                            <div>
-                                <p>Ler 1 capítulo de livro e hablar con mi amigos en el facebuko</p>
-                                <ul>
-                                    <li>D</li>
-                                    <li>S</li>
-                                    <li>Q</li>
-                                    <li>Q</li>
-                                    <li>S</li>
-                                    <li>S</li>
-                                </ul>
-                            </div>
-                            <button>
-                                <BsTrash/>
-                            </button>
-                        </CardHabito>
-
-                        <CardHabito>
-                            <div>
-                                <p>Ler 1 capítulo de livro e hablar con mi amigos en el facebuko</p>
-                                <ul>
-                                    <li>D</li>
-                                    <li>S</li>
-                                    <li>Q</li>
-                                    <li>Q</li>
-                                    <li>S</li>
-                                    <li>S</li>
-                                </ul>
-                            </div>
-                            <button>
-                                <BsTrash/>
-                            </button>
-                        </CardHabito>
-
-                        <CardHabito>
-                            <div>
-                                <p>Ler 1 capítulo de livro e hablar con mi amigos en el facebuko</p>
-                                <ul>
-                                    <li>D</li>
-                                    <li>S</li>
-                                    <li>Q</li>
-                                    <li>Q</li>
-                                    <li>S</li>
-                                    <li>S</li>
-                                </ul>
-                            </div>
-                            <button>
-                                <BsTrash/>
-                            </button>
-                        </CardHabito>
-
-                        <CardHabito>
-                            <div>
-                                <p>Ler 1 capítulo de livro e hablar con mi amigos en el facebuko</p>
-                                <ul>
-                                    <li>D</li>
-                                    <li>S</li>
-                                    <li>Q</li>
-                                    <li>Q</li>
-                                    <li>S</li>
-                                    <li>S</li>
-                                </ul>
-                            </div>
-                            <button>
-                                <BsTrash/>
-                            </button>
-                        </CardHabito>
-
-                        <CardHabito>
-                            <div>
-                                <p>Ler 1 capítulo de livro e hablar con mi amigos en el facebuko</p>
-                                <ul>
-                                    <li>D</li>
-                                    <li>S</li>
-                                    <li>Q</li>
-                                    <li>Q</li>
-                                    <li>S</li>
-                                    <li>S</li>
-                                </ul>
-                            </div>
-                            <button>
-                                <BsTrash/>
-                            </button>
-                        </CardHabito>
-
-                        <CardHabito>
-                            <div>
-                                <p>Ler 1 capítulo de livro e hablar con mi amigos en el facebuko</p>
-                                <ul>
-                                    <li>D</li>
-                                    <li>S</li>
-                                    <li>Q</li>
-                                    <li>Q</li>
-                                    <li>S</li>
-                                    <li>S</li>
-                                </ul>
-                            </div>
-                            <button>
-                                <BsTrash/>
-                            </button>
-                        </CardHabito>
-                        
+                        )))}
                     </main>
-                    
                 </HabitosContainer>
             <FooterMenu/>
         </section>
@@ -338,7 +247,7 @@ const CardHabito = styled.div`
         column-gap: 4px;
     }
 
-    li{
+    ul button{
         width: 30px;
         height: 30px;
 
@@ -352,14 +261,6 @@ const CardHabito = styled.div`
         line-height: 25px;
 
         color: #DBDBDB;
-    }
-
-    button{
-        border: none;
-        background-color: transparent;
-        height: 100%;
-        padding-top: 15px;
-        display: flex;
     }
 
     .container-button-save{
@@ -391,6 +292,17 @@ const CardHabito = styled.div`
         background: none;
         color: #52B6FF;
     }
-    
-    
+    .active{
+        background: #CFCFCF;
+        color: #FFFFFF;
+    }
+`
+const DeleteTarefa = styled.button`
+    border: none;
+    background-color: transparent;
+    height: 100%;
+    padding-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `
