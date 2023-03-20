@@ -33,7 +33,17 @@ export function Habitos(){
 
     },[infoUser.token, renderizar])
 
-    
+    function selecionaDia(dia){
+        if(!diaSelecionado.includes(dia)){
+
+        const adicionaDia = [...diaSelecionado, dia];
+        setDiaSelecionado(adicionaDia);
+        console.log(adicionaDia);
+        }else{
+            const removeDia = [...diaSelecionado].filter(el => el !== dia)
+            setDiaSelecionado(removeDia);
+        }
+    }
 
     return(
         <section>
@@ -60,7 +70,7 @@ export function Habitos(){
                                     {semana.map((dia,i)=>(
                                         <button
                                         type="button"
-                                        /* onClick={()=>selecionaDia(i)} */ 
+                                        onClick={()=>selecionaDia(i)}
                                         className={diaSelecionado.includes(i)?'active':''}
                                         disabled={isDisabled} 
                                         key={i}
