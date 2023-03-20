@@ -10,6 +10,7 @@ import * as dayjs from "dayjs";
 export function Hoje(){
     const { infoUser } = useContext(UserContext)
     const [tarefas, setTarefas] = useState([])
+    const [renderiza, setRenderiza] = useState([])
     const updateLocale = require('dayjs/plugin/updateLocale')
     dayjs.extend(updateLocale)
     dayjs.updateLocale('en', {
@@ -33,7 +34,21 @@ export function Hoje(){
             console.log(err.response.data)
         })
 
-    }, [infoUser] )
+    }, [infoUser, renderiza] )
+
+    function ConcluirHabito(id){
+        const config = {headers: {Authorization: `Bearer ${infoUser.token}`}}
+        const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/check`;
+        const body = {}
+        axios.post(url,body, config)
+        .then((res)=>{
+            setRenderiza(res);
+            console.log(res)
+        })
+        .catch((err)=>{
+            console.log(err.response.data)
+        })
+    }
 
     return(
         <section>
@@ -54,7 +69,7 @@ export function Hoje(){
                                 <h3>Sequência atual: 3 dias</h3>
                                 <h3>Seu recorde: 5 dias</h3>
                             </div>
-                            <button className={card.done?'concluido':''}>
+                            <button onClick={()=> ConcluirHabito(card.id)} className={card.done?'concluido':''}>
                                 <FaCheck size={35} className="icon-check"/>
                             </button>
                         </CardHoje>
