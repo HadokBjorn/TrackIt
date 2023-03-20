@@ -81,6 +81,18 @@ export function Habitos(){
         
     }
 
+    function deletarHabito(id){
+        console.log(id)
+        const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`;
+        const config = {headers: {Authorization: `Bearer ${infoUser.token}`}}
+        axios.delete(url, config)
+        .then((res)=>{
+            console.log(res)
+            setRenderizar(res)
+        })
+        .catch((err)=> console.log(err.response.data.message))
+    }
+
     return(
         <section>
             <Navbar/>
@@ -157,7 +169,7 @@ export function Habitos(){
                                         ))}
                                     </ul>
                                 </div>
-                                <DeleteTarefa /* onClick={()=>deletarHabito(item.id)} */>
+                                <DeleteTarefa onClick={()=>deletarHabito(item.id)}>
                                     <BsTrash/>
                                 </DeleteTarefa>
                         </CardHabito>
