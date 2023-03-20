@@ -45,6 +45,10 @@ export function Habitos(){
         }
     }
 
+    function capturaInput(e){
+        setForm({...form,[e.target.name]:e.target.value})
+    }
+
     return(
         <section>
             <Navbar/>
@@ -63,7 +67,7 @@ export function Habitos(){
                                 type="text" 
                                 required 
                                 placeholder="nome do hábito"
-                                /* onChange={capturaInput} */
+                                onChange={capturaInput}
                                 />
 
                                 <ul>
