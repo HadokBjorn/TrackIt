@@ -49,6 +49,38 @@ export function Habitos(){
         setForm({...form,[e.target.name]:e.target.value})
     }
 
+    function submitTarefa(e){
+        e.preventDefault();
+        setIsDisabled(true);
+
+        const days = diaSelecionado.map( el => ( el === 0? 7 : el ));
+        const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits";
+        const config = {headers: {Authorization: `Bearer ${infoUser.token}`}}
+        const body = {...form, days: days};
+        
+        if(diaSelecionado.length === 0){
+            alert("Você deve marcar o dia para executar esta tarefa")
+            setIsDisabled(false);
+        }else{
+            axios.post(url, body, config)
+            .then((res)=>{
+            setDiaSelecionado([]);
+            setForm({name:''});
+            setIsDisabled(false);
+            setNewHabito(false);
+            setRenderizar(res);
+
+
+            console.log(res.data)
+            })
+            .catch((err)=>{
+            setIsDisabled(false);
+            alert(err.response.data.message)
+            })
+        }
+        
+    }
+
     return(
         <section>
             <Navbar/>
@@ -60,7 +92,7 @@ export function Habitos(){
                         </div>
                         {newHabito?
                         (<CardHabito>
-                            <form /* onSubmit={submitTarefa} */>
+                            <form onSubmit={submitTarefa}>
                                 <input
                                 value={form.name}
                                 name="name"
