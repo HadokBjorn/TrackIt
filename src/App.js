@@ -10,11 +10,12 @@ import { useState } from "react";
 
 function App() {
   const [infoUser, setInfoUser] = useState();
+  const [porcentagem, setPorcentagem] = useState(0);
 
   return (
     <section>
       <BrowserRouter>
-      <UserContext.Provider value={{infoUser, setInfoUser}}>
+      <UserContext.Provider value={{infoUser, setInfoUser, porcentagem, setPorcentagem}}>
         <Routes>
           <Route path="/" element={<Login/>}/>
             <Route path="/cadastro" element={<Cadastro/>}/>

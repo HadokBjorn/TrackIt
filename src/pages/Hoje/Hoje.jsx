@@ -8,7 +8,7 @@ import axios from "axios";
 import * as dayjs from "dayjs";
 
 export function Hoje(){
-    const { infoUser } = useContext(UserContext)
+    const { infoUser, porcentagem, setPorcentagem } = useContext(UserContext)
     const [tarefas, setTarefas] = useState([])
     const [renderiza, setRenderiza] = useState([])
     const [isDisabled, setIsDisabled] = useState(false)
@@ -26,6 +26,7 @@ export function Hoje(){
         .then((res)=>{
             setTarefas(res.data)
             console.log(res.data)
+            atualizaPorcentagem(res.data)
         })
         .catch((err)=>{
             console.log(err.response.data)
@@ -46,7 +47,6 @@ export function Hoje(){
             .then((res)=>{
                 setRenderiza(item.name);
                 setIsDisabled(false)
-                console.log(res)
             })
             .catch((err)=>{
                 alert(err.response.data.message)
@@ -58,7 +58,6 @@ export function Hoje(){
             axios.post(url,body, config)
             .then((res)=>{
                 setRenderiza(item.id);
-                console.log(res)
                 setIsDisabled(false)
             })
             .catch((err)=>{
@@ -66,6 +65,15 @@ export function Hoje(){
                 setIsDisabled(false)
             })
         }
+    }
+
+    function atualizaPorcentagem(data){
+        if(data.length!==0){
+            const itensConcluidos = data.filter(item => item.done === true)
+            const newPorcentagem = parseInt((itensConcluidos.length/data.length)*100);
+            console.log(newPorcentagem)
+            setPorcentagem(newPorcentagem);
+    }
     }
 
     return(
@@ -76,7 +84,9 @@ export function Hoje(){
                     <p>{dayjs().format('dddd')}, {dayjs().format('DD')}/{dayjs().format('MM')}</p>
                     {(tarefas.length===0)?
                     (<h3>Nenhum hábito adicionado</h3>):
-                    (<h3>Nenhum hábito concluído ainda</h3>)}
+                    (porcentagem===0?
+                    <h3>Nenhum hábito concluído ainda</h3>:
+                    <h3 className="green">{porcentagem}% dos hábitos concluídos</h3>)}
                 </header>
                 <main>
                     {(tarefas.length===0)?"":
@@ -84,8 +94,22 @@ export function Hoje(){
                         <CardHoje key={i}>
                             <div>
                                 <p>{card.name}</p>
-                                <h3>Sequência atual: 3 dias</h3>
-                                <h3>Seu recorde: 5 dias</h3>
+                                <h3>Sequência atual: 
+                                    <span 
+                                        className={(card.currentSequence===card.highestSequence && card.highestSequence>0 )?
+                                        'recorde':''}
+                                        > 
+                                        {` ${card.currentSequence} dias`}
+                                    </span>
+                                </h3>
+                                <h3>Seu recorde: 
+                                    <span
+                                    className={(card.currentSequence===card.highestSequence && card.highestSequence>0 )?
+                                        'recorde':''}
+                                    >
+                                        {` ${card.highestSequence} dias`}
+                                    </span>
+                                </h3>
                             </div>
                             <button disabled={isDisabled} onClick={()=> ConcluirHabito(card)} className={card.done?'concluido':''}>
                                 <FaCheck size={35} className="icon-check"/>
@@ -130,6 +154,9 @@ const HojeContainer = styled.div`
         line-height: 22px;
 
         color: #BABABA;
+    }
+    header .green{
+        color:#8FC549;
     }
     main{
         width: 100%;
@@ -189,6 +216,9 @@ const CardHoje = styled.div`
 
     .concluido{
         background-color: #8FC549;
+    }
+    .recorde{
+        color: #8FC549;
     }
 
 `

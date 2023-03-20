@@ -87,35 +87,35 @@ export function Habitos(){
         const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`;
         const config = {headers: {Authorization: `Bearer ${infoUser.token}`}}
 
-            confirmAlert({
-                customUI: ({ onClose }) => {
-                    return (
-                    <div className='custom-ui'>
-                        <h1>Deseja realmente deletar este hábito?</h1>
-                            <div className='delete-cancel'>
-                            <button onClick={onClose}>Cancelar</button>
-                            <button
-                            className='delete'
-                            onClick={() => {
-                                axios.delete(url, config)
-                                .then((res)=>{
-                                    console.log(res)
-                                    onClose();
-                                    setRenderizar(res)
-                                })
-                                .catch((err)=> {
-                                    onClose();
-                                    console.log(err.response.data.message)
-                                })
-                            }}
-                            >
-                                Deletar!
-                            </button>
-                        </div>
+        confirmAlert({
+            customUI: ({ onClose }) => {
+                return (
+                <div className='custom-ui'>
+                    <h1>Deseja realmente deletar este hábito?</h1>
+                        <div className='delete-cancel'>
+                        <button onClick={onClose}>Cancelar</button>
+                        <button
+                        className='delete'
+                        onClick={() => {
+                            axios.delete(url, config)
+                            .then((res)=>{
+                                console.log(res)
+                                onClose();
+                                setRenderizar(res)
+                            })
+                            .catch((err)=> {
+                                onClose();
+                                console.log(err.response.data.message)
+                            })
+                        }}
+                        >
+                            Deletar!
+                        </button>
                     </div>
-                    );
-                }
-                });
+                </div>
+                );
+            }
+        });
     }
 
     return(
