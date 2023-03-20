@@ -5,10 +5,20 @@ import { FaCheck} from "react-icons/fa"
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../contexts/UserContext";
 import axios from "axios";
+import * as dayjs from "dayjs";
 
 export function Hoje(){
     const { infoUser } = useContext(UserContext)
     const [tarefas, setTarefas] = useState([])
+    const updateLocale = require('dayjs/plugin/updateLocale')
+    dayjs.extend(updateLocale)
+    dayjs.updateLocale('en', {
+        weekdays: [
+            "Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabádo"
+        ]
+        })
+    console.log()
+
 
     useEffect( () => {
         const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
@@ -30,7 +40,7 @@ export function Hoje(){
             <Navbar/>
             <HojeContainer>
                 <header>
-                    <p>Segunda, 17/05</p>
+                    <p>{dayjs().format('dddd')}, {dayjs().format('DD')}/{dayjs().format('MM')}</p>
                     {(tarefas.length===0)?
                     (<h3>Nenhum hábito adicionado</h3>):
                     (<h3>Nenhum hábito concluído ainda</h3>)}
