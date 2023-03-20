@@ -57,7 +57,7 @@ export function Login(){
                     onChange={capturaInput}
                     />
 
-                    <button disabled={loader} type="submit">
+                    <button data-test="login-btn" disabled={loader} type="submit">
                         {loader?(<ThreeDots 
                         height="45" 
                         width="80"

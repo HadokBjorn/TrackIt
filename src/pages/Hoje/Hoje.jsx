@@ -81,20 +81,18 @@ export function Hoje(){
             <Navbar/>
             <HojeContainer>
                 <header>
-                    <p>{dayjs().format('dddd')}, {dayjs().format('DD')}/{dayjs().format('MM')}</p>
-                    {(tarefas.length===0)?
-                    (<h3>Nenhum hábito adicionado</h3>):
-                    (porcentagem===0?
-                    <h3>Nenhum hábito concluído ainda</h3>:
-                    <h3 className="green">{porcentagem}% dos hábitos concluídos</h3>)}
+                    <p  data-test="today">{dayjs().format('dddd')}, {dayjs().format('DD')}/{dayjs().format('MM')}</p>
+                    {(porcentagem===0?
+                    <h3 data-test="today-counter">Nenhum hábito concluído ainda</h3>:
+                    <h3 data-test="today-counter" className="green">{porcentagem}% dos hábitos concluídos</h3>)}
                 </header>
                 <main>
                     {(tarefas.length===0)?"":
                     (tarefas.map((card,i)=>(
-                        <CardHoje key={i}>
+                        <CardHoje data-test="today-habit-container" key={i}>
                             <div>
-                                <p>{card.name}</p>
-                                <h3>Sequência atual: 
+                                <p data-test="today-habit-name">{card.name}</p>
+                                <h3 data-test="today-habit-sequence">Sequência atual: 
                                     <span 
                                         className={(card.currentSequence===card.highestSequence && card.highestSequence>0 )?
                                         'recorde':''}
@@ -102,7 +100,7 @@ export function Hoje(){
                                         {` ${card.currentSequence} dias`}
                                     </span>
                                 </h3>
-                                <h3>Seu recorde: 
+                                <h3 data-test="today-habit-record">Seu recorde: 
                                     <span
                                     className={(card.currentSequence===card.highestSequence && card.highestSequence>0 )?
                                         'recorde':''}
@@ -111,7 +109,7 @@ export function Hoje(){
                                     </span>
                                 </h3>
                             </div>
-                            <button disabled={isDisabled} onClick={()=> ConcluirHabito(card)} className={card.done?'concluido':''}>
+                            <button data-test="today-habit-check-btn" disabled={isDisabled} onClick={()=> ConcluirHabito(card)} className={card.done?'concluido':''}>
                                 <FaCheck size={35} className="icon-check"/>
                             </button>
                         </CardHoje>

@@ -38,7 +38,8 @@ function Cadastro(){
         <PageContainer onSubmit={(e)=>sendCadastro(e)}>
             <img src={loginLogo} alt="Logo de Login"/>
                 <FormContainer>
-                    <input 
+                    <input
+                    data-test="email-input"
                     required 
                     name="email"
                     value={form.email} 
@@ -48,6 +49,7 @@ function Cadastro(){
                     />
 
                     <input
+                    data-test="password-input"
                     required
                     name="password"
                     value={form.password} 
@@ -57,6 +59,7 @@ function Cadastro(){
                     />
 
                     <input
+                    data-test="user-name-input"
                     required
                     name="name"
                     value={form.name} 
@@ -66,6 +69,7 @@ function Cadastro(){
                     />
 
                     <input
+                    data-test="user-image-input"
                     required
                     name="image"
                     value={form.image}
@@ -74,7 +78,7 @@ function Cadastro(){
                     onChange={capturaInput}
                     /> 
 
-                    <button disabled={loader} type="submit">
+                    <button data-test="signup-btn" disabled={loader} type="submit">
                         {loader?(<ThreeDots 
                         height="45" 
                         width="80"
@@ -86,7 +90,7 @@ function Cadastro(){
                         visible={true}/>):'Cadastrar'}
                     </button>
 
-                    <Link to={"/"}>
+                    <Link data-test="login-link" to={"/"}>
                         <p>Já tem uma conta? Faça login!</p>
                     </Link>
                 </FormContainer>

@@ -125,12 +125,13 @@ export function Habitos(){
                     <header>
                         <div>
                             <p>Meus hábitos</p>
-                            <button onClick={()=>setNewHabito(true)}> + </button>
+                            <button data-test="habit-create-btn" onClick={()=>setNewHabito(true)}> + </button>
                         </div>
                         {newHabito?
-                        (<CardHabito>
+                        (<CardHabito data-test="habit-create-container">
                             <form onSubmit={submitTarefa}>
                                 <input
+                                data-test="habit-name-input"
                                 value={form.name}
                                 name="name"
                                 type="text" 
@@ -142,6 +143,7 @@ export function Habitos(){
                                 <ul>
                                     {semana.map((dia,i)=>(
                                         <button
+                                        data-test="habit-day"
                                         type="button"
                                         onClick={()=>selecionaDia(i)}
                                         className={diaSelecionado.includes(i)?'active':''}
@@ -153,8 +155,8 @@ export function Habitos(){
                                     ))}
                                 </ul>
                                 <div className='container-button-save'>
-                                    <p onClick={()=>setNewHabito(false)} className='cancelar'>Cancelar</p>
-                                    <button disabled={isDisabled} type="submit">
+                                    <p data-test="habit-create-cancel-btn" onClick={()=>setNewHabito(false)} className='cancelar'>Cancelar</p>
+                                    <button data-test="habit-create-save-btn" disabled={isDisabled} type="submit">
                                         {isDisabled?(<ThreeDots 
                                         height="10" 
                                         width="100%"
@@ -180,13 +182,15 @@ export function Habitos(){
                             </p>
                         </CardHabito>):
                         (tarefas.map((item,i)=>(
-                            <CardHabito key={i}>
+                            <CardHabito data-test="habit-container" key={i}>
                                 <div>
-                                    <p>{item.name}</p>
+                                    <p data-test="habit-name" >{item.name}</p>
                                     <ul>
                                         {semana.map((dia,j)=>(
                                             <button
+                                            data-test="habit-day"
                                             type="button"
+                                            disabled={true}
                                             className={(item.days.includes(j) || (item.days.includes(7) && j===0))?
                                             'active':''} key={j}>
                                                 {dia}
@@ -194,7 +198,7 @@ export function Habitos(){
                                         ))}
                                     </ul>
                                 </div>
-                                <DeleteTarefa onClick={()=>deletarHabito(item.id)}>
+                                <DeleteTarefa data-test="habit-delete-btn" onClick={()=>deletarHabito(item.id)}>
                                     <BsTrash/>
                                 </DeleteTarefa>
                         </CardHabito>

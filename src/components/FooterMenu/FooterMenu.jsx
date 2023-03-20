@@ -8,19 +8,19 @@ import { useContext } from "react";
 export function FooterMenu(){
     const { porcentagem } = useContext(UserContext);
     return(
-        <Footer>
+        <Footer data-test="menu">
             <div>
                 <div className="footer-buttons">
-                    <Link to={"/habitos"}>
+                    <Link to={"/habitos"} data-test="habit-link" >
                         <button>Hábitos</button>
                     </Link>
-                    <Link to={"/historico"}>
+                    <Link to={"/historico"} data-test="history-link">
                         <button>Histórico</button>
                     </Link>
                 </div>
                 
                 <div className="central-button">
-                    <Link to={"/hoje"}>
+                    <Link to={"/hoje"} data-test="today-link">
                         <CircularProgressbar 
                             value={porcentagem} 
                             text={"Hoje"}
