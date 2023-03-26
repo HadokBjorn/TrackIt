@@ -151,7 +151,7 @@ export function Habitos(){
                                     ))}
                                 </ul>
                                 <div className='container-button-save'>
-                                    <button data-test="habit-create-cancel-btn" disabled={isDisabled} className="cancelar" onClick={()=>setNewHabito(false)} className='cancelar'>Cancelar</button>
+                                    <button data-test="habit-create-cancel-btn" disabled={isDisabled} className="cancelar" onClick={()=>setNewHabito(false)}>Cancelar</button>
                                     <button data-test="habit-create-save-btn" disabled={isDisabled} type="submit">
                                         {isDisabled?(<ThreeDots 
                                         height="10" 

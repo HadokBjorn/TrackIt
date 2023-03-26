@@ -76,6 +76,7 @@ const Footer= styled.footer`
         text-decoration: none;
         text-align: center;
         color: #52B6FF;
+        background-color: transparent;
 
         display: flex;
         align-items: center;

@@ -22,7 +22,6 @@ function Cadastro(){
             .then((res)=>{
                 setLoader(false);
                 navigate("/");
-                console.log(res.data);
             })
             .catch((err)=>{
                 setLoader(false);
