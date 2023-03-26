@@ -14,8 +14,7 @@ export function Habitos(){
     const { infoUser } = useContext(UserContext)
     const [newHabito, setNewHabito] = useState(false);
     const semana = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
-    const [diaSelecionado, setDiaSelecionado] = useState([])
-    const [form, setForm] = useState({name:''})
+    const [form, setForm] = useState({name:'', days:'',})
     const [tarefas, setTarefas] = useState([])
     const [isDisabled, setIsDisabled] = useState(false)
     const [renderizar, setRenderizar] = useState()
@@ -35,13 +34,13 @@ export function Habitos(){
     },[infoUser.token, renderizar])
 
     function selecionaDia(dia){
-        if(!diaSelecionado.includes(dia)){
+        if(!form.days.includes(dia)){
 
-        const adicionaDia = [...diaSelecionado, dia];
-        setDiaSelecionado(adicionaDia);
+        const adicionaDia = [...form.days, dia];
+        setForm({...form, days:adicionaDia});
         }else{
-            const removeDia = [...diaSelecionado].filter(el => el !== dia)
-            setDiaSelecionado(removeDia);
+            const removeDia = [...form.days].filter(el => el !== dia)
+            setForm({...form, days:removeDia});
         }
     }
 
@@ -53,19 +52,17 @@ export function Habitos(){
         e.preventDefault();
         setIsDisabled(true);
 
-        const days = diaSelecionado.map( el => ( el === 0? 7 : el ));
         const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits";
         const config = {headers: {Authorization: `Bearer ${infoUser.token}`}}
-        const body = {...form, days: days};
+        const body = {...form};
         
-        if(diaSelecionado.length === 0){
+        if(form.days.length === 0){
             alert("Você deve marcar o dia para executar esta tarefa")
             setIsDisabled(false);
         }else{
             axios.post(url, body, config)
             .then((res)=>{
-            setDiaSelecionado([]);
-            setForm({name:''});
+            setForm({name:'', days: '',});
             setIsDisabled(false);
             setNewHabito(false);
             setRenderizar(res);
@@ -94,7 +91,6 @@ export function Habitos(){
                         onClick={() => {
                             axios.delete(url, config)
                             .then((res)=>{
-                                console.log(res)
                                 onClose();
                                 setRenderizar(res)
                             })
@@ -142,7 +138,7 @@ export function Habitos(){
                                         data-test="habit-day"
                                         type="button"
                                         onClick={()=>selecionaDia(i)}
-                                        className={diaSelecionado.includes(i)?'active':''}
+                                        className={form.days.includes(i)?'active':''}
                                         disabled={isDisabled} 
                                         key={i}
                                         >
@@ -187,7 +183,7 @@ export function Habitos(){
                                             data-test="habit-day"
                                             type="button"
                                             disabled={true}
-                                            className={(item.days.includes(j) || (item.days.includes(7) && j===0))?
+                                            className={(item.days.includes(j))?
                                             'active':''} key={j}>
                                                 {dia}
                                             </button>
